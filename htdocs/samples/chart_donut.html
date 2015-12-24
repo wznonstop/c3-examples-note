@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/c3.css">
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/js/c3.js"></script>
+    <script> 
+    console.log(c3)
+      var chart = c3.generate({
+        data: {
+          columns: [
+//            ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
+            ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
+            ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
+            //同一类型下的值具有累加的效果。如此处的"setosa"，30后面的两个值会与30相加，3个数累加的和：210,将作为"setosa"这个数据的最终值呈现在图中
+            ["setosa", 30, 80, 100],
+           // ["versicolor", 40],
+           // ["virginica", 50],
+          ],
+          type : 'donut',
+          onmouseover: function (d, i) { 
+            // debugger;
+            txt = document.getElementsByClassName("c3-chart-arcs-title")[0];
+            txt.firstChild.nodeValue=Math.round(d.ratio * 1000)/10+"%";;
+            console.log("onmouseover", d, i, this);
+           },
+          onmouseout: function (d, i) { console.log("onmouseout", d, i, this); },
+          onclick: function (d, i) { console.log("onclick", d, i, this); },
+          order: null // set null to disable sort of data. desc is the default.
+        },
+        //饼状图的坐标轴设置没有什么意义，这块写的没啥用
+        axis: {
+          x: {
+            label: 'Sepal.Width'
+          },
+          y: {
+            label: 'Petal.Width'
+          }
+        },
+        donut: {
+          //label是显示在甜甜圈每块上面的文字，不进行设置，默认是显示百分比，参看API中donut.label.format
+          label: {
+//            format: function (d, ratio) { return ""; }
+          },
+          // label: {
+          //     format: function (value, ratio, id) {
+          //       return d3.format('$')(value);
+          //     }
+          //   },
+          //这个是设定一个阈值，小于该值所占百分比的，就将不显示文字。此处，占比小于10%的都将不显示
+          // label: {
+          //     threshold: 0.1
+          //   },
+          //title是中间显示的文字
+          title: "Iris Petal Width",
+          //这个宽度是环的宽度
+          width: 70
+        }
+      });
+
+      //1秒之后将'data1'数据加载进来
+      setTimeout(function () {
+        chart.load({
+          columns: [
+            ['data1', 30, 20, 50, 40, 60, 50],
+          ]
+        });
+      }, 1000);
+
+      //过2秒之后将'virginica'这项数据从中去掉
+      setTimeout(function () {
+        chart.unload({
+          ids: 'virginica'
+        });
+      }, 2000);
+
+      function getElementsByClassName(n) { 
+      var classElements = [],allElements = document.getElementsByTagName('*'); 
+      for (var i=0; i< allElements.length; i++ ) 
+      { 
+      if (allElements[i].className == n ) { 
+      classElements[classElements.length] = allElements[i]; 
+      } 
+      } 
+      return classElements; 
+      }
+    </script>
+  </body>
+</html>
